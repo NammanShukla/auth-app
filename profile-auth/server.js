@@ -13,7 +13,8 @@ const JWT_SECRET = process.env.JWT_SECRET;
 // Allow requests from Next.js frontend
 app.use(cors({
   origin: 'http://localhost:3000',  
-  methods: ['GET', 'POST'],        
+  methods: ['GET', 'POST'],  
+  credentials: true,
 }));
 
 // Parse incoming request bodies as JSON
@@ -36,18 +37,6 @@ const userSchema = new mongoose.Schema({
 
 // Create User Model
 const User = mongoose.model('User', userSchema);
-
-// JWT Middleware
-const authenticateToken = (req, res, next) => {
-    const token = req.cookies.token; // Get token from httpOnly cookie
-    if (!token) return res.status(401).json({ message: "Access denied" });
-  
-    jwt.verify(token, JWT_SECRET, (err, decoded) => {
-      if (err) return res.status(403).json({ message: "Invalid token" });
-      req.user = decoded;
-      next();
-    });
-  };
 
 // Register Route
 app.post('/api/register', async (req, res) => {
@@ -94,9 +83,16 @@ app.post('/api/login', async (req, res) => {
   
       // Generate JWT token
       const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-  
-      // Return success message and token
-      res.json({ message: 'Login successful', token });
+
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production", // Secure in production
+        sameSite: "strict",
+        maxAge: 60 * 60 * 1000, // 1 hour 
+      });
+      // Return success message
+      res.json({ message: "Login successful" });
+
   
     } catch (error) {
       console.error(error);

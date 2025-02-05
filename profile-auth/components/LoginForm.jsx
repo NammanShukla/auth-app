@@ -20,13 +20,15 @@ export default function Login() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
+        credentials: "include", 
       });
 
       const data = await response.json();
 
       if (response.ok) {
         setSuccess("Login successful!");
-        localStorage.setItem("token", data.token); // Store JWT token
+        console.log(data);
+        localStorage.setItem("token", data.token); 
 
         router.push("/dashboard");
       } else {
