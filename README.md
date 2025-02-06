@@ -44,3 +44,18 @@ After a bit of research and looking at my logical structure, redefining the midd
 
 Now after figuring out cors and the way cookies work… I was able to implement basic security, I should probably add a logout button on the dashboard.
 
+
+## Functionality 
+![Login Page](https://i.imgur.com/qedPDic.png)
+
+This is the Login/Landing page which is linked to the mongodb database, letting users login.
+
+![Register Page](https://i.imgur.com/sjsc2IE.png)
+![Register Page Success](https://i.imgur.com/uclE2G3.png)
+
+The register page is where the user can register and create their accounts then proceed back to the login page to input their credentials.
+
+![Dashboard](https://i.imgur.com/8dyli64.png)
+
+The dashboard is protected and only can be accessed from users who have logged in via the login page. 
+
